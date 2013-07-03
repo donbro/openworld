@@ -1,0 +1,245 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeExecutable = 763F5F66118EC095000C620E /* PadView */;
+		activeTarget = 8D1107260486CEB800E47090 /* PadView */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* PadView */,
+		);
+		codeSenseManager = 763F5F7B118EC0AB000C620E /* Code sense */;
+		executables = (
+			763F5F66118EC095000C620E /* PadView */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					834,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					794,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 297065847;
+			PBXWorkspaceStateSaveDate = 297065847;
+		};
+		perUserProjectItems = {
+			76D380FB11B4DDA100BE5599 /* PBXTextBookmark */ = 76D380FB11B4DDA100BE5599 /* PBXTextBookmark */;
+			76D380FD11B4DDA100BE5599 /* PBXTextBookmark */ = 76D380FD11B4DDA100BE5599 /* PBXTextBookmark */;
+			76D3810211B4DE1F00BE5599 /* PBXTextBookmark */ = 76D3810211B4DE1F00BE5599 /* PBXTextBookmark */;
+			76D3810411B4DE1F00BE5599 /* PBXTextBookmark */ = 76D3810411B4DE1F00BE5599 /* PBXTextBookmark */;
+			76D3811211B4DF9700BE5599 /* PBXTextBookmark */ = 76D3811211B4DF9700BE5599 /* PBXTextBookmark */;
+			76D3811411B4E01200BE5599 /* PBXTextBookmark */ = 76D3811411B4E01200BE5599 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 763F5F7A118EC0AB000C620E /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 824}}";
+			sepNavSelRange = "{1524, 0}";
+			sepNavVisRange = "{0, 967}";
+		};
+	};
+	7617BD9311A2B9A200CC6DDC /* CGImageUtils.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1024, 3049}}";
+			sepNavSelRange = "{347, 12}";
+			sepNavVisRange = "{5271, 2787}";
+		};
+	};
+	763BC4EC1192C124008E7A39 /* PadView.py */ = {
+		uiCtxt = {
+			sepNavFolds = "{\n    c =     (\n                {\n            l = value;\n            r = \"{4790, 9}\";\n            s = 1;\n        }\n    );\n    r = \"{0, 33089}\";\n    s = 0;\n}";
+			sepNavIntBoundsRect = "{{0, 0}, {1024, 10375}}";
+			sepNavSelRange = "{4286, 0}";
+			sepNavVisRange = "{3136, 2618}";
+			sepNavWindowFrame = "{{15, -1}, {880, 828}}";
+		};
+	};
+	763BC5A11192F3FA008E7A39 /* PVController.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 1213}}";
+			sepNavSelRange = "{1049, 15}";
+			sepNavVisRange = "{1070, 1047}";
+		};
+	};
+	763BC72C11968B0F008E7A39 /* PVDatabase.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1024, 3442}}";
+			sepNavSelRange = "{858, 64}";
+			sepNavVisRange = "{5060, 2215}";
+		};
+	};
+	763BC77A1196C74C008E7A39 /* database.pickle.txt */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1024, 451}}";
+			sepNavSelRange = "{102, 0}";
+			sepNavVisRange = "{0, 102}";
+		};
+	};
+	763F5F66118EC095000C620E /* PadView */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = PadView;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	763F5F7A118EC0AB000C620E /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	763F5F7B118EC0AB000C620E /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	7670C73211ACC05E00B998F5 /* PVLayout.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1024, 1971}}";
+			sepNavSelRange = "{4430, 0}";
+			sepNavVisRange = "{0, 1312}";
+		};
+	};
+	76D380FB11B4DDA100BE5599 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 763BC4EC1192C124008E7A39 /* PadView.py */;
+		name = "PadView.py: 108";
+		rLen = 0;
+		rLoc = 4286;
+		rType = 0;
+		vrLen = 2626;
+		vrLoc = 3136;
+	};
+	76D380FD11B4DDA100BE5599 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 763BC4EC1192C124008E7A39 /* PadView.py */;
+		name = "PadView.py: 108";
+		rLen = 0;
+		rLoc = 4286;
+		rType = 0;
+		vrLen = 2626;
+		vrLoc = 3136;
+	};
+	76D3810211B4DE1F00BE5599 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* PVAppController.py */;
+		name = "PVAppController.py: 125";
+		rLen = 0;
+		rLoc = 4004;
+		rType = 0;
+		vrLen = 1669;
+		vrLoc = 2335;
+	};
+	76D3810411B4DE1F00BE5599 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7790198E0C07548A00326F66 /* PVAppController.py */;
+		name = "PVAppController.py: 125";
+		rLen = 0;
+		rLoc = 4004;
+		rType = 0;
+		vrLen = 1669;
+		vrLoc = 2335;
+	};
+	76D3811211B4DF9700BE5599 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 763BC72C11968B0F008E7A39 /* PVDatabase.py */;
+		name = "PVDatabase.py: 30";
+		rLen = 64;
+		rLoc = 858;
+		rType = 0;
+		vrLen = 476;
+		vrLoc = 6799;
+	};
+	76D3811411B4E01200BE5599 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 763BC72C11968B0F008E7A39 /* PVDatabase.py */;
+		name = "PVDatabase.py: 30";
+		rLen = 64;
+		rLoc = 858;
+		rType = 0;
+		vrLen = 2215;
+		vrLoc = 5060;
+	};
+	77631A3E0C0748CF005415CB /* main.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 576}}";
+			sepNavSelRange = "{1016, 0}";
+			sepNavVisRange = "{215, 1054}";
+		};
+	};
+	7790198E0C07548A00326F66 /* PVAppController.py */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 1648}}";
+			sepNavSelRange = "{4004, 0}";
+			sepNavVisRange = "{3512, 491}";
+			sepNavWindowFrame = "{{15, -1}, {880, 828}}";
+		};
+	};
+	8D1107260486CEB800E47090 /* PadView */ = {
+		activeExec = 0;
+		executables = (
+			763F5F66118EC095000C620E /* PadView */,
+		);
+	};
+}
