@@ -672,12 +672,6 @@ def main():
 
     print "cat.position() is", cat.position()
 
-    # cat2 = CATextLayer.alloc().init()
-    # cat2.setString_("Hello Rounder-Upers!")
-    # textColor      = CGColorCreateGenericRGB(0.4, 0.2, 0.1, 1.0)
-    # cat2.setForegroundColor_(textColor)
-    # cat2.setBackgroundColor_(textBkgndColor)
-    # # cat2.setPosition_( (140,40)  )
 
     #########
     # font           = NSFont.fontWithName_size_("HelveticaNeue-Medium",14.0)
@@ -742,6 +736,12 @@ def main():
 
     # print "s3.size() is", s3.size()    # s3.size() is <NSSize width=293.0 height=21.0>
 
+    # cat2.setString_("Hello Rounder-Upers!")
+    # textColor      = CGColorCreateGenericRGB(0.4, 0.2, 0.1, 1.0)
+    # cat2.setForegroundColor_(textColor)
+    # cat2.setBackgroundColor_(textBkgndColor)
+    # # cat2.setPosition_( (140,40)  )
+
     cat2 = CATextLayer.alloc().init()
 
     textColor      =  CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0)
@@ -759,10 +759,8 @@ def main():
     x = cat2.backgroundColor()
     print "cat2.backgroundColor() is",x
 
-    cat_h2 = CATextLayer.alloc().init()
     
     cat2.setString_(s3)
-    cat_h2.setString_(s3_h)
 
     # s4 = cat2.string()
     # print "size is", s4.size()  # size is <NSSize width=730.4039999999998 height=37.0>
@@ -773,6 +771,8 @@ def main():
     size = s3.size()
     
     cat2.setFrame_(  ( origin , size )  )      
+    zPosition = 3
+    cat2.setZPosition_(zPosition)
     
     print "cat2.frame() is", cat2.frame()
 
@@ -780,6 +780,8 @@ def main():
     # textColor_h      =  CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1)
     textColor_h      = CGColorCreateGenericGray(1.0, 1.0)                # dark charcoal, almost black
     
+    cat_h2 = CATextLayer.alloc().init()
+    cat_h2.setString_(s3_h)
     cat_h2.setForegroundColor_(textColor_h)
     cat_h2.setBackgroundColor_(textBkgndColor)
 
@@ -795,17 +797,11 @@ def main():
 
 
     zPosition = 3
-    cat2.setZPosition_(zPosition)
     cat_h2.setZPosition_(zPosition-2)
 
 
     ##########
     
-
-    print "exampleQCCompositionLayer.zPosition is:", exampleQCCompositionLayer.zPosition() 
-
-    print "cat2.zPosition is:", cat2.zPosition() 
-    print "cat2.Position is:", cat2.position() 
 
     # rootLayer = cat2
     
