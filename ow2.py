@@ -48,16 +48,10 @@ class AppDelegate (NSObject):
     def applicationDidFinishLaunching_(self, aNotification):
         app = aNotification.object()
 
-        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+        printB("applicationDidFinishLaunching", app, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
-                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
-
-        # printB("applicationDidFinishLaunching",app,  add=['mainWindow','currentSystemPresentationOptions'],
-        #                             subtract=['applicationIconImage', 'helpMenu', 'gestureEventMask', 'mainMenu', 'menu',
-        #                                         'servicesMenu', 'servicesProvider'])
+                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])     
         
-
-         
         win = app.windows()[0]
         
         # The new window creates a view to be its default content view. 
@@ -113,6 +107,8 @@ class AppDelegate (NSObject):
         width, height = wf.size
         magic_delta = 0.2   # must be > 0.1 (!)
         win.setFrame_display_(  (  (  x , y ) , ( width, height + magic_delta ) ) , objc.YES )
+        
+        printB("win.setFrame_display (magic)", win, only=['frame'])        
 
         #
         #   end serious magic
@@ -303,14 +299,9 @@ def main():
 
     app = NSApplication.sharedApplication()
     
-    # printB("App", app, only=['acceptsFirstResponder', 'nextResponder'])
-    # printB("App", app,  add=['mainWindow','currentSystemPresentationOptions'],
-    #                             subtract=['applicationIconImage', 'helpMenu', 'gestureEventMask', 'mainMenu', 'menu',
-    #                                         'servicesMenu', 'servicesProvider'])
-
-    printB("App (orig)", app, only=['acceptsFirstResponder', 'nextResponder']+
-                ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
-                                'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
+    # printB("App (orig)", app, only=['acceptsFirstResponder', 'nextResponder']+
+    #             ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+    #                             'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
 
 
     # oh give me a place in the dock, and allow activation…    

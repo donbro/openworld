@@ -12,8 +12,8 @@ def printB(label,b,add=[],subtract=[],only=[], all_names=False):
     obj=b
     print_setters(obj, add=add,subtract=subtract,only=only, all_names=all_names)
     
-def xx(obj):
-    return [ k for k in obj.__dict__.keys() if ( k[-1]!='_') and ( k[-1]!=':') ]    
+def list_single_attrs(obj):
+    return sorted([ k for k in obj.__dict__.keys() if ( k[-1]!='_') and ( k[-1]!=':') ]    )
     
 def print_setters(obj, add=[],subtract=[],only=[],all_names=False):
 
@@ -30,12 +30,16 @@ def print_setters(obj, add=[],subtract=[],only=[],all_names=False):
                 if  'class NIL' in rt or "type 'object'" in rt or "class NSObject" in rt:
                     pass
                 else:
+                    if rt.startswith('<objective-c class '):
+                        rt = 'class '+rt[19:-1]
 
                     print rt
                     print
-                    # print obj.allPropertyKeys()
-                    # print
-                    print xx(cls)
+                    z =  obj.allPropertyKeys()
+                    if len(z) > 0:
+                        print obj.allPropertyKeys()
+                        print
+                    print list_single_attrs(cls)
                     print
         
         return

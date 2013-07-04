@@ -71,7 +71,7 @@ class OpenView(NSView):
     #     CALayer *overlayLayer;
         
     def initialize_(self, b):
-        printB("OpenView received initialize",  self )
+        printB("OpenView received initialize!",  self )
         # is this ever called in our PyObjC world?
         
     # [self exposeBinding:kLTViewSlides];
@@ -81,18 +81,22 @@ class OpenView(NSView):
 
     def initWithFrame_(self, frame):
 
-        printB("initWithFrame (frame)",  frame )
+        self._location = self._locationDefault
+        self._itemColor = self._itemColorDefault
+        self._backgroundColor = self._backgroundColorDefault
+
+        printB("initWithFrame",  self ,all_names=True)
+        printB("view.initWithFrame", self, add=['frame'])
+        
+        
         self.dragging = None
         
         result = super(OpenView, self).initWithFrame_(frame)
 
-        print "result is", result
+        print "result of super(OpenView, self).initWithFrame_(frame) is", result
         if result is None:
             return result
 
-        self._location = self._locationDefault
-        self._itemColor = self._itemColorDefault
-        # self._backgroundColor = self._backgroundColorDefault
 
         # self.setLocation_(self._locationDefault)
         # self.setItemColor_(self._itemColorDefault)
@@ -236,7 +240,7 @@ class OpenView(NSView):
         """."""
         return True
 
-    @objc.IBAction      # haha only kidding!
+    # @objc.IBAction      # haha only kidding!
     def setItemPropertiesToDefault_(self, sender):
         """."""
         self.setLocation_(self._locationDefault)
