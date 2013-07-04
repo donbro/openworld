@@ -10,9 +10,10 @@ Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 
 import objc
 from Foundation import NSURL
-from AppKit import NSFont    
+from AppKit import NSFont   , NSColor , NSAttributedString
 from Quartz import (CGColorCreateGenericRGB    , CGColorCreateGenericGray ,CGImageSourceCreateWithURL,
                             CGImageSourceCreateImageAtIndex, QCComposition, QCCompositionLayer)
+from Quartz import CALayer, CATextLayer, CIFilter
                             
 from printB import printB
 
@@ -70,7 +71,8 @@ def createTextLayer(    origin=(420,120),
     
     return cat2
                     
-    
+
+
 def createLayer(    origin=(420,120),
                     size = (180,180),
                     backgroundColor=textBkgndColor,
@@ -109,10 +111,10 @@ def createLayer(    origin=(420,120),
     testLayer.setBorderColor_( borderColor )           
 
     # o will or o won't you ever work you shadow you shadow you
-    # testLayer.setShadowColor_(NSColor.redColor())
-    # testLayer.setShadowOpacity_( 1.0 )
-    # testLayer.setShadowRadius_(4.0)
-    # testLayer.setShadowOffset_((5.0, 5.0))
+    testLayer.setShadowColor_(NSColor.redColor())
+    testLayer.setShadowOpacity_( 1.0 )
+    testLayer.setShadowRadius_(4.0)
+    testLayer.setShadowOffset_((5.0, 5.0))
     
     return testLayer
 

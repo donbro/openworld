@@ -9,12 +9,14 @@ Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 
 import objc
 
-from AppKit import NSColor, NSCursor
+
 from Foundation import NSMakePoint, NSPointInRect, NSMakeRect, NSEqualPoints
-from AppKit import NSView, CALayer
+from AppKit import NSColor, NSCursor, NSView, CALayer, NSApp
 
 from printB import printB, print_setters
-from createLayer import getQCCompLayer
+from createLayer import getQCCompLayer, createLayer, createTextLayer
+
+from Quartz import CGColorCreateGenericRGB, CIFilter
 
 # General Event Information
 
@@ -109,11 +111,13 @@ class OpenView(NSView):
         #
         
         backingLayer = getQCCompLayer()
+        frame = self.frame()
+        # backingLayer.setBounds_( ((0, 0), (frame.size.width, frame.size.height)) ) # not necessary?
+        
         # backingLayer.setFrame_( win_frame ) # view.frame() )      
         # backingLayer.frame = NSRectToCGRect(frame);
-        # backingLayer.bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
         # backingLayer.backgroundColor = CGColorCreateGenericRGB(1, 1, 1, 1.0);
-        # backingLayer.opaque = YES;
+        backingLayer.setOpaque_(objc.YES)
 
         printB("QCLayer", backingLayer)
         # print_setters(backingLayer)
@@ -153,10 +157,91 @@ class OpenView(NSView):
         # overlayLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 0.0);
         # overlayLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 
+        printB("overlayLayer", overlayLayer, all_names=True)
 
 
         backingLayer.addSublayer_(overlayLayer)
 
+        layerDict = {
+            'origin' : (420,120),
+            'size'  :  (120,120),
+            'zPosition'  :  12,
+            'image_path'  :  "/Users/donb/projects/openworld/gray button 96px.psd",
+            'cornerRadius'  :  16,
+            'borderWidth'  :  1.0,
+        }
+
+        testLayer = createLayer(**layerDict)
+        rootLayer.addSublayer_(testLayer)
+
+        layerDict = {
+            'origin' : (420,120),
+            'size'  :  (120,120),
+            'zPosition'  :  12,
+            'image_path'  :  "/Users/donb/projects/openworld/gray button 96px.psd",
+            'cornerRadius'  :  16,
+            'borderWidth'  :  1.0,
+        }
+        # 
+        # testLayer = createLayer(**layerDict)
+        # rootLayer.addSublayer_(testLayer)
+        # 
+        
+        app = NSApp()
+        applicationIconImage=app.applicationIconImage()
+
+        layerDict['image']=applicationIconImage
+        layerDict['origin']=(100,400)
+        layerDict['size']=applicationIconImage.size()
+        testLayer3 = createLayer( **layerDict)
+        rootLayer.addSublayer_(testLayer3)
+        
+
+        printB("testLayer3",  testLayer3  ) # frame = bounds for origin (0,0)?
+
+        
+        
+        # lake_picture_path = "/Library/Desktop Pictures/Lake.jpg"    
+        # theLakeImage = getImage(lake_picture_path)
+
+        layerDict['origin']=(300,300)
+        layerDict['image_path']="/Library/Desktop Pictures/Lake.jpg"
+        del layerDict['image']        
+        layerDict['size']=(300,300)
+
+        testLayer2 = createLayer( **layerDict)
+        rootLayer.addSublayer_(testLayer2)
+
+
+ 
+        layerDict['origin']=(420,60)
+        layerDict['text_string']="full-size and on the 1080p LCD"
+        layerDict['zPosition'] = 20
+        layerDict['textColor']=NSColor.blackColor()
+        
+        del layerDict['image_path']
+        
+        testLayer3 = createTextLayer( **layerDict)
+        rootLayer.addSublayer_(testLayer3)
+
+
+
+        whiteColor = CGColorCreateGenericRGB(0.0, 0.5, 1.0, 1.0)
+
+        layerDict['textColor']=NSColor.whiteColor()
+        layerDict['zPosition'] = 19
+        
+        testLayer4 = createTextLayer(**layerDict)
+        rootLayer.addSublayer_(testLayer4)
+
+        blurFilter = CIFilter.filterWithName_("CIGaussianBlur")
+ 
+        blurFilter.setDefaults()
+        # blurFilter.setValue_forKey_( 2.0, "inputRadius" )
+        blurFilter.setValue_forKey_( .75, "inputRadius" )
+        blurFilter.setName_("blur")
+ 
+        testLayer4.setFilters_( [blurFilter] )
         # // init ivars
         # _slides = [[NSMutableArray array] retain];
         # self.selectionIndexes = [NSIndexSet indexSet];

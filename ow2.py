@@ -34,6 +34,8 @@ from Quartz import ( CGImageSourceCreateWithURL, CGImageSourceCreateImageAtIndex
 
 from PyObjCTools import AppHelper
 
+from createLayer import createLayer
+
 print  "objc.__version__ is", objc.__version__
 
 class AppDelegate (NSObject):
@@ -63,34 +65,10 @@ class AppDelegate (NSObject):
 
         # view =  win.contentView()
 
-        wf = view.bounds()
-        x, y = wf.origin
-        width, height = wf.size
-        s2 = "origin=(x=%r y=%r) size=(width=%r height=%r)" % (x,y,width,height)
-
-         #    
-         # 
-         # backingLayer = getQCCompLayer()
-         # # backingLayer.setFrame_( win_frame ) # view.frame() )      
-         # printB("backingLayer", backingLayer)
-         # # print_setters(backingLayer)
-         # 
-         # if True:
-         #     # rootLayer = CALayer.layer()
-         #     rootLayer = backingLayer
-         #     view.setLayer_(rootLayer)
-         #     view.setWantsLayer_( objc.YES )
-         # else:
-         #     view.setWantsLayer_( objc.YES )
-         #     rootLayer = view.layer()
-         # 
-         # 
-         # printB("View",  (view,  s2 )   ) # frame = bounds for origin (0,0)?
-         # print_setters(view)
-         # 
-         # printB("rootLayer", rootLayer)
-         
-        # rootLayer.setNeedsDisplay()
+        # wf = view.bounds()
+        # x, y = wf.origin
+        # width, height = wf.size
+        # s2 = "origin=(x=%r y=%r) size=(width=%r height=%r)" % (x,y,width,height)
 
         # 
         #   serious magic here.  kind of a kickstarter for the Quartz Composer?
@@ -114,73 +92,7 @@ class AppDelegate (NSObject):
         #   end serious magic
         #
         
-        layerDict = {
-            'origin' : (420,120),
-            'size'  :  (120,120),
-            'zPosition'  :  12,
-            'image_path'  :  "/Users/donb/projects/openworld/gray button 96px.psd",
-            'cornerRadius'  :  16,
-            'borderWidth'  :  1.0,
-        }
-        testLayer = createLayer(**layerDict)
-        rootLayer.addSublayer_(testLayer)
 
-        
-        
-        applicationIconImage=app.applicationIconImage()
-
-        layerDict['image']=applicationIconImage
-        layerDict['origin']=(100,400)
-        layerDict['size']=applicationIconImage.size()
-        testLayer3 = createLayer( **layerDict)
-        rootLayer.addSublayer_(testLayer3)
-        
-
-        printB("testLayer3",  testLayer3  ) # frame = bounds for origin (0,0)?
-
-        
-        
-        # lake_picture_path = "/Library/Desktop Pictures/Lake.jpg"    
-        # theLakeImage = getImage(lake_picture_path)
-
-        layerDict['origin']=(300,300)
-        layerDict['image_path']="/Library/Desktop Pictures/Lake.jpg"
-        del layerDict['image']        
-        layerDict['size']=(300,300)
-
-        testLayer2 = createLayer( **layerDict)
-        rootLayer.addSublayer_(testLayer2)
-
-
- 
-        layerDict['origin']=(420,60)
-        layerDict['text_string']="full-size and on the 1080p LCD"
-        layerDict['zPosition'] = 20
-        layerDict['textColor']=NSColor.blackColor()
-        
-        del layerDict['image_path']
-        
-        testLayer3 = createTextLayer( **layerDict)
-        rootLayer.addSublayer_(testLayer3)
-
-
-
-        whiteColor = CGColorCreateGenericRGB(0.0, 0.5, 1.0, 1.0)
-
-        layerDict['textColor']=NSColor.whiteColor()
-        layerDict['zPosition'] = 19
-        
-        testLayer4 = createTextLayer(**layerDict)
-        rootLayer.addSublayer_(testLayer4)
-
-        blurFilter = CIFilter.filterWithName_("CIGaussianBlur")
- 
-        blurFilter.setDefaults()
-        # blurFilter.setValue_forKey_( 2.0, "inputRadius" )
-        blurFilter.setValue_forKey_( .75, "inputRadius" )
-        blurFilter.setName_("blur")
- 
-        testLayer4.setFilters_( [blurFilter] )
 
         app.activateIgnoringOtherApps_(objc.YES)
 
@@ -232,7 +144,8 @@ class AppDelegate (NSObject):
         
 
     def applicationWillTerminate_(self, aNotification):
-        printB("applicationWillTerminate",  aNotification.object())
+        app = aNotification.object()
+        printB("applicationWillTerminate",  app )
         printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                     'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
@@ -248,7 +161,7 @@ class AppDelegate (NSObject):
         
     def applicationShouldTerminateAfterLastWindowClosed_(self, theApplication):
         printB("applicationShouldTerminateAfterLastWindowClosed is called.  returns YES",  theApplication)
-        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+        printB("App", theApplication, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                     'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         
