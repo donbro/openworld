@@ -48,9 +48,13 @@ class AppDelegate (NSObject):
     def applicationDidFinishLaunching_(self, aNotification):
         app = aNotification.object()
 
-        printB("applicationDidFinishLaunching",app,  add=['mainWindow','currentSystemPresentationOptions'],
-                                    subtract=['applicationIconImage', 'helpMenu', 'gestureEventMask', 'mainMenu', 'menu',
-                                                'servicesMenu', 'servicesProvider'])
+        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
+
+        # printB("applicationDidFinishLaunching",app,  add=['mainWindow','currentSystemPresentationOptions'],
+        #                             subtract=['applicationIconImage', 'helpMenu', 'gestureEventMask', 'mainMenu', 'menu',
+        #                                         'servicesMenu', 'servicesProvider'])
         
 
          
@@ -70,28 +74,28 @@ class AppDelegate (NSObject):
         width, height = wf.size
         s2 = "origin=(x=%r y=%r) size=(width=%r height=%r)" % (x,y,width,height)
 
-    
-        
-        QCLayer = getQCCompLayer()
-        # QCLayer.setFrame_( win_frame ) # view.frame() )      
-        printB("QCLayer", QCLayer)
-        # print_setters(QCLayer)
-        
-        if True:
-            # rootLayer = CALayer.layer()
-            rootLayer = QCLayer
-            view.setLayer_(rootLayer)
-            view.setWantsLayer_( objc.YES )
-        else:
-            view.setWantsLayer_( objc.YES )
-            rootLayer = view.layer()
-
-
-        printB("View",  (view,  s2 )   ) # frame = bounds for origin (0,0)?
-        print_setters(view)
-
-        printB("rootLayer", rootLayer)
-        
+         #    
+         # 
+         # backingLayer = getQCCompLayer()
+         # # backingLayer.setFrame_( win_frame ) # view.frame() )      
+         # printB("backingLayer", backingLayer)
+         # # print_setters(backingLayer)
+         # 
+         # if True:
+         #     # rootLayer = CALayer.layer()
+         #     rootLayer = backingLayer
+         #     view.setLayer_(rootLayer)
+         #     view.setWantsLayer_( objc.YES )
+         # else:
+         #     view.setWantsLayer_( objc.YES )
+         #     rootLayer = view.layer()
+         # 
+         # 
+         # printB("View",  (view,  s2 )   ) # frame = bounds for origin (0,0)?
+         # print_setters(view)
+         # 
+         # printB("rootLayer", rootLayer)
+         
         # rootLayer.setNeedsDisplay()
 
         # 
@@ -195,6 +199,9 @@ class AppDelegate (NSObject):
         
     def applicationWillBecomeActive_(self, aNotification):
         printB("applicationWillBecomeActive",  aNotification.object())
+        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         
         # applicationWillBecomeActive seems a good place to "refresh", ie, this is a "new look" at the screen
         
@@ -206,6 +213,9 @@ class AppDelegate (NSObject):
     def applicationWillResignActive_(self, aNotification):
         """ Sent by the default notification center immediately before the application is deactivated."""
         printB("applicationWillResignActive",  aNotification.object(), only=['isActive', 'mainWindow'])
+        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         
         # activationPolicy                 : 0
         # applicationIconImage             : <NSImage 0x7fe73311b400 Size={128, 128} Reps=(
@@ -227,6 +237,9 @@ class AppDelegate (NSObject):
 
     def applicationWillTerminate_(self, aNotification):
         printB("applicationWillTerminate",  aNotification.object())
+        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         
         # need to release the lock here as when the
         # application terminates it does not run the rest the
@@ -239,6 +252,10 @@ class AppDelegate (NSObject):
         
     def applicationShouldTerminateAfterLastWindowClosed_(self, theApplication):
         printB("applicationShouldTerminateAfterLastWindowClosed is called.  returns YES",  theApplication)
+        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
+        
         # print "applicationShouldTerminateAfterLastWindowClosed  theApplication is %r" % ( theApplication )
         return objc.YES
         
@@ -279,337 +296,22 @@ class WinDelegate (NSObject):
 
 from OpenView import OpenView
 
-# from Foundation import NSMakePoint, NSPointInRect, NSCursor, NSMakeRect, NSEqualPoints
-# from AppKit import NSView
-# 
-# # General Event Information
-# general_event_info = [ 'context'          ,               
-#                         'locationInWindow'            ,    
-#                         'modifierFlags'                 ,  
-#                         'timestamp'                       ,
-#                         'type'                            ,
-#                         'window'                          ,
-#                         'CGEvent',
-#                         'windowNumber'                    
-#                         ]
-# mouse_event_info =   [
-#             'pressedMouseButtons',
-#             'doubleClickInterval',
-#             'mouseLocation',
-#             'buttonNumber',
-#             'clickCount',
-#             'pressure'  
-#             ]
-#             
-# key_event_info = [
-#     'modifierFlags',
-#     'keyRepeatDelay',
-#     'keyRepeatInterval',
-#     'characters',
-#     'charactersIgnoringModifiers',
-#     'isARepeat',
-#     'keyCode'
-# ]
-# 
-# class OpenView(NSView):
-#     """."""
-#     _locationDefault = NSMakePoint(0.0, 0.0)
-#     _itemColorDefault = NSColor.redColor()
-#     _backgroundColorDefault = NSColor.whiteColor()
-# 
-#     # def awakeFromNib(self):       # no nib!
-# 
-#     def initWithFrame_(self, frame):
-#         printB("initWithFrame (frame)",  frame )
-#         
-#         self.dragging = None
-#         
-#         result = super(OpenView, self).initWithFrame_(frame)
-#         if result is not None:
-#             result._location = self._locationDefault
-#             result._itemColor = self._itemColorDefault
-#             result._backgroundColor = self._backgroundColorDefault
-#             
-# 
-#         printB("initWithFrame (super)",  super(OpenView, self) )
-#         printB("initWithFrame (view)",  self )        
-#             
-#         return result
-# 
-#     def drawRect_(self, rect):
-#         """."""
-#         NSColor.whiteColor().set()
-#         NSBezierPath.fillRect_(rect)
-#         self.itemColor().set()
-#         NSBezierPath.fillRect_(self.calculatedItemBounds())
-# 
-#     def isOpaque(self):
-#         """."""
-#         return (self.backgroundColor().alphaComponent() >= 1.0)
-# 
-#     def offsetLocationByX_andY_(self, x, y):
-#         """."""
-#         self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-#         if self.isFlipped():
-#             invertDeltaY = -1
-#         else:
-#             invertDeltaY = 1
-#         self.location().x = self.location().x + x
-#         self.location().y = self.location().y + y * invertDeltaY
-#         self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-# 
-#     def mouseDown_(self, event):
-# 
-#         printB("mouseDown",  event  ,only=mouse_event_info+general_event_info)
-# 
-#         clickLocation = self.convertPoint_fromView_(event.locationInWindow(),
-#                                                     None)
-#         itemHit = self.isPointInItem_(clickLocation)
-#         if itemHit:
-#             self.dragging = True
-#             self.lastDragLocation = clickLocation
-#             NSCursor.closedHandCursor().push()
-# 
-# 
-#     def mouseDragged_(self, event):
-#         """."""
-#         
-#         x = [  'eventNumber',
-#                 'deltaX',
-#                 'deltaY' 
-#                 ]
-# 
-#         printB("mouseDragged",  event, only = mouse_event_info+general_event_info+x)
-#         if self.dragging:
-#             newDragLocation = self.convertPoint_fromView_(
-#                 event.locationInWindow(),
-#                 None
-#             )
-#             self.offsetLocationByX_andY_(
-#                 newDragLocation.x - self.lastDragLocation.x,
-#                 newDragLocation.y - self.lastDragLocation.y
-#             )
-#             self.lastDragLocation = newDragLocation
-#             self.autoscroll_(event)
-# 
-#     def mouseUp_(self, event):
-#         """."""
-#         self.dragging = False
-#         # NSCursor has both an instance and a class method w/ the name 'pop'
-#         NSCursor.pyobjc_classMethods.pop()
-#         self.window().invalidateCursorRectsForView_(self)
-# 
-#     def acceptsFirstResponder(self):
-#         """."""
-#         return True
-# 
-#     @objc.IBAction      # haha only kidding!
-#     def setItemPropertiesToDefault_(self, sender):
-#         """."""
-#         self.setLocation_(self._locationDefault)
-#         self.setItemColor_(self._itemColorDefault)
-#         self.setBackgroundColor_(self._backgroundColorDefault)
-# 
-#     def keyDown_(self, event):
-#         print "keydown, event is %r" % event
-#         printB("keyDown",  event, only = general_event_info+key_event_info)
-# 
-#         handled = False
-#         characters = event.charactersIgnoringModifiers()
-#         
-#         if characters.isEqual_('r'):
-#             handled = True
-#             self.setItemPropertiesToDefault_(self)
-#         if handled is False:
-#             q = super(OpenView, self).keyDown_(event)  # beeps if not handled/forwarded to super (who doesn't know what to do?)
-#             print "keydown: q is", q
-#             
-#     def setLocation_(self, point):
-#         """."""
-#         if not NSEqualPoints(point, self.location()):
-#             self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-#             self._location = point
-#             self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-#             self.window().invalidateCursorRectsForView_(self)
-# 
-#     def location(self):
-#         """."""
-#         return self._location
-# 
-#     def setBackgroundColor_(self, aColor):
-#         """."""
-#         if not self.backgroundColor().isEqual_(aColor):
-#             self._backgroundColor = aColor
-#             self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-# 
-#     def backgroundColor(self):
-#         """."""
-#         return self._backgroundColor
-# 
-#     def setItemColor_(self, aColor):
-#         """."""
-#         if not self.itemColor().isEqual_(aColor):
-#             self._itemColor = aColor
-#             self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-# 
-#     def itemColor(self):
-#         """."""
-#         return self._itemColor
-# 
-#     def calculatedItemBounds(self):
-#         """."""
-#         return NSMakeRect(self.location().x, self.location().y,
-#                           60.0, 20.0)
-# 
-#     def isPointInItem_(self, testPoint):
-#         """."""
-#         itemHit = NSPointInRect(testPoint, self.calculatedItemBounds())
-#         if itemHit:
-#             pass
-#         return itemHit
-
-    
-
-def getImage(path):
-
-    url = NSURL.fileURLWithPath_(path)
-    imagesrc = CGImageSourceCreateWithURL(url, None)        
-    return CGImageSourceCreateImageAtIndex(imagesrc, 0, None);
-
-textBkgndColor = CGColorCreateGenericRGB(0.8, 0.8, 0.5, 0.8);  # light gray
-textBkgndColorNone = CGColorCreateGenericRGB(0.8, 0.8, 0.5, 0.0);  # transparent
-borderColor = CGColorCreateGenericGray(.4, 0.75)
-
-textColor2      = CGColorCreateGenericRGB(0.4, 0.2, 0.1, 1.0)
-    # font           = NSFont.fontWithName_size_("HelveticaNeue-Medium",14.0)
-    # font           = NSFont.fontWithName_size_("HelveticaNeue-Medium",36.0)
-    # font           = NSFont.fontWithName_size_("Avenir Next LT Pro Ultra Light Italic",36.0)
-font_avenir           = NSFont.fontWithName_size_("Avenir Next LT Pro Italic",36.0)
-textColor0      = CGColorCreateGenericRGB(0.6, 0.2, 0.3, 1.0)
-textHighlight   = CGColorCreateGenericRGB(1.0, 0.8, 1.0, 0.9)
-whiteColor = CGColorCreateGenericRGB(0.0, 0.5, 1.0, 1.0)
-
-def createTextLayer(    origin=(420,120),
-                    size = (180,180),
-                    backgroundColor=textBkgndColorNone,
-                    textColor=textColor0,
-                    zPosition = 12,
-                    text_string = None,
-                    cornerRadius = 25.0,
-                    borderWidth = 1.0,
-                    borderColor=borderColor,
-                    font=font_avenir
-                    ):
-                    
-    cat2 = CATextLayer.alloc().init()
-
-    # cat2.setForegroundColor_(textColor)
-    # cat2.setBackgroundColor_(NSColor.whiteColor()) # textBkgndColor)
-    cat2.setBackgroundColor_( backgroundColor )
-
-    s3 = NSAttributedString.alloc().initWithString_attributes_(text_string, { "NSFont":font,
-                    "NSColor" : textColor } ) # default is black is fine
-                    
-    cat2.setString_(s3)
-    size = s3.size()
-
-
-    cat2.setFrame_(  ( origin , size )  )      
-    cat2.setZPosition_(zPosition)
-    cat2.setBorderWidth_(borderWidth)
-    cat2.setBorderColor_( borderColor )           
-    
-    # cat2.setMasksToBounds_( objc.NO )  # doesn'tmatter for a TextLayer?
-    
-    
-    return cat2
-                    
-    
-def createLayer(    origin=(420,120),
-                    size = (180,180),
-                    backgroundColor=textBkgndColor,
-                    zPosition = 12,
-                    image_path = None,
-                    image=None,
-                    cornerRadius = 25.0,
-                    borderWidth = 1.0,
-                    borderColor=borderColor
-                    ):
-                    
-                    # name , bounds=None
-                    
-
-    testLayer = CALayer.alloc().init()
-
-    # if bounds != None:  
-    #     l.setBounds_(bounds)
-
-    # origin=(420,120)
-    # size = (300,300)
-    testLayer.setFrame_(  ( origin , size )  )      
-    testLayer.setBackgroundColor_( backgroundColor )
-    testLayer.setZPosition_(zPosition)
-    
-    if image is not None:
-        testLayer.setContents_( image )
-    elif image_path is not None:
-        image = getImage(image_path)
-        testLayer.setContents_( image )
-    
-    testLayer.setCornerRadius_(cornerRadius)      
-    
-    testLayer.setMasksToBounds_( objc.YES )     # YES, it really does clip everything!
-    testLayer.setBorderWidth_(borderWidth)
-    testLayer.setBorderColor_( borderColor )           
-
-    # o will or o won't you ever work you shadow you shadow you
-    # testLayer.setShadowColor_(NSColor.redColor())
-    # testLayer.setShadowOpacity_( 1.0 )
-    # testLayer.setShadowRadius_(4.0)
-    # testLayer.setShadowOffset_((5.0, 5.0))
-    
-    return testLayer
-    
-def getQCCompLayer(): # (s):
-    
-    # cpath = "/Users/donb/Library/Compositions/gradient_2.qtz"
-    cpath = "/Users/donb/Library/Compositions/gradient3_light.qtz"
-    # cpath = "/Users/donb/Library/Compositions/v12 grey background.qtz"
-
-    # exampleQCCompositionLayer = QCCompositionLayer.compositionLayerWithFile_(cpath)
-    
-    theQCComposition = QCComposition.compositionWithFile_(cpath)
-
-    printB("QCComposition", theQCComposition)
-    
-
-    # print "theQCComposition.attributes() are", theQCComposition.attributes()
-    # print "theQCComposition.identifier() are", theQCComposition.identifier()
-    # print "theQCComposition.inputKeys() are", theQCComposition.inputKeys()
-
-    # theQCComposition.inputKeys() are (
-    #     "_protocolInput_PrimaryColor",
-    #     "_protocolInput_SecondaryColor",
-    #     direction,
-    #     position
-    # )
-    
-    exampleQCCompositionLayer = QCCompositionLayer.compositionLayerWithComposition_(theQCComposition)
-
-
-    zPosition = 0
-    exampleQCCompositionLayer.setZPosition_(zPosition)
-
-    return exampleQCCompositionLayer
 
 from printB import printB, print_setters
     
 def main():
 
     app = NSApplication.sharedApplication()
-    printB("App", app,  add=['mainWindow','currentSystemPresentationOptions'],
-                                subtract=['applicationIconImage', 'helpMenu', 'gestureEventMask', 'mainMenu', 'menu',
-                                            'servicesMenu', 'servicesProvider'])
+    
+    # printB("App", app, only=['acceptsFirstResponder', 'nextResponder'])
+    # printB("App", app,  add=['mainWindow','currentSystemPresentationOptions'],
+    #                             subtract=['applicationIconImage', 'helpMenu', 'gestureEventMask', 'mainMenu', 'menu',
+    #                                         'servicesMenu', 'servicesProvider'])
+
+    printB("App (orig)", app, only=['acceptsFirstResponder', 'nextResponder']+
+                ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
+
 
     # oh give me a place in the dock, and allow activation…    
     app.setActivationPolicy_( NSApplicationActivationPolicyRegular    ) 
@@ -617,8 +319,9 @@ def main():
     # app.activateIgnoringOtherApps_(objc.YES)
 
 
-    print_setters(app, only=['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
-                                'currentSystemPresentationOptions'])
+    printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+                ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
 
 
     delegate = AppDelegate.alloc().init()

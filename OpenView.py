@@ -11,8 +11,10 @@ import objc
 
 from AppKit import NSColor, NSCursor
 from Foundation import NSMakePoint, NSPointInRect, NSMakeRect, NSEqualPoints
-from AppKit import NSView
+from AppKit import NSView, CALayer
+
 from printB import printB, print_setters
+from createLayer import getQCCompLayer
 
 # General Event Information
 
@@ -44,6 +46,19 @@ key_event_info = [
     'keyCode'
 ]
 
+# // The MyOverLayer class is used so that our overlay layer with the drag handles is not included in hit testing. 
+# Otherwise, hit testing would always return the overlay layer since it is the top layer and fills the entire view. 
+# It is implemented it in this file because it is a private helper class of LTView.
+# @interface MyOverLayer : CALayer
+# @end
+# 
+
+class MyOverLayer(CALayer):         # @implementation MyOverLayer
+
+    def containsPoint_(self, p):
+        return objc.NO    # just NO, always NO, not here , this layer never contains any points
+
+
 class OpenView(NSView):
     """."""
     _locationDefault = NSMakePoint(0.0, 0.0)
@@ -52,6 +67,9 @@ class OpenView(NSView):
 
     # def awakeFromNib(self):       # no nib!
     
+    # def __init__(self):
+    #     CALayer *overlayLayer;
+        
     def initialize_(self, b):
         printB("OpenView received initialize",  self )
         # is this ever called in our PyObjC world?
@@ -62,64 +80,93 @@ class OpenView(NSView):
     
 
     def initWithFrame_(self, frame):
-        
-        result = super(OpenView, self).initWithFrame_(frame)
 
-        if result is not None:
-
-            result._location = self._locationDefault
-            result._itemColor = self._itemColorDefault
-            result._backgroundColor = self._backgroundColorDefault
-
-            # // setup the CALayer for the overall full-screen view
-
-            CALayer *backingLayer = [CALayer layer];
-            _overlayLayer = [[_LTOverlayLayer layer] retain];
-
-            [self setLayer:backingLayer];
-            [self setWantsLayer:YES];
-
-            backingLayer.frame = NSRectToCGRect(frame);
-            backingLayer.bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
-            backingLayer.backgroundColor = CGColorCreateGenericRGB(1, 1, 1, 1.0);
-            backingLayer.opaque = YES;
-
-            // The overlay layer is used to draw any drag handles, so that they are always on top of all slides. We must take care to make sure this layer is always the last one.
-            _overlayLayer.frame = backingLayer.frame;
-            _overlayLayer.opaque = NO;
-            _overlayLayer.delegate = self; // We want to be the delegate so we can do the drag handle drawing
-            _overlayLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 0.0);
-            _overlayLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-            [backingLayer addSublayer:_overlayLayer];
-
-            // init ivars
-            _slides = [[NSMutableArray array] retain];
-            self.selectionIndexes = [NSIndexSet indexSet];
-
-            // init the input trackers
-            [self _initTrackers];
-
-            // register for dragging
-            [self registerForDraggedTypes:[NSArray arrayWithObject:(NSString *)kUTTypeFileURL]];
-
-            // we want touch events
-            [self setAcceptsTouchEvents:YES];
-         
-        
         printB("initWithFrame (frame)",  frame )
-        
         self.dragging = None
         
         result = super(OpenView, self).initWithFrame_(frame)
-        if result is not None:
-            result._location = self._locationDefault
-            result._itemColor = self._itemColorDefault
-            result._backgroundColor = self._backgroundColorDefault
-            
 
-        printB("initWithFrame (super)",  super(OpenView, self) )
-        printB("initWithFrame (view)",  self )        
-            
+        print "result is", result
+        if result is None:
+            return result
+
+        self._location = self._locationDefault
+        self._itemColor = self._itemColorDefault
+        # self._backgroundColor = self._backgroundColorDefault
+
+        # self.setLocation_(self._locationDefault)
+        # self.setItemColor_(self._itemColorDefault)
+        # self.setBackgroundColor_(self._backgroundColorDefault)
+
+        # // setup the CALayer for the overall full-screen view
+
+        #
+        #   backing layer
+        #
+        
+        backingLayer = getQCCompLayer()
+        # backingLayer.setFrame_( win_frame ) # view.frame() )      
+        # backingLayer.frame = NSRectToCGRect(frame);
+        # backingLayer.bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
+        # backingLayer.backgroundColor = CGColorCreateGenericRGB(1, 1, 1, 1.0);
+        # backingLayer.opaque = YES;
+
+        printB("QCLayer", backingLayer)
+        # print_setters(backingLayer)
+    
+        if True:
+            # rootLayer = CALayer.layer()
+            self.setLayer_(backingLayer)
+            self.setWantsLayer_( objc.YES )
+            rootLayer = backingLayer            
+        else:
+            self.setWantsLayer_( objc.YES )
+            rootLayer = self.layer()
+
+        # printB("initWithFrame (super)",  super(OpenView, self) )
+        # printB("initWithFrame (view)",  self )        
+
+
+        printB("View",  self ) # frame = bounds for origin (0,0)?
+        print_setters(self)
+
+        printB("rootLayer", rootLayer)
+
+
+        #
+        #   overlay Layer
+        #
+        #  The overlay layer is used to draw any drag handles, so that they are always on top of all slides. 
+        #  We must take care to make sure this layer is always the last one.
+        #
+        
+        overlayLayer = MyOverLayer.layer() # (_LTOverlayLayer was MyOverLayer)
+        overlayLayer.setFrame_( backingLayer.frame() ) # view.frame() )      
+        overlayLayer.setOpaque_( objc.NO )
+
+        # We want to be the delegate so we can do the drag handle drawing        
+        overlayLayer.setDelegate_(self)
+        # overlayLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 0.0);
+        # overlayLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+
+
+
+        backingLayer.addSublayer_(overlayLayer)
+
+        # // init ivars
+        # _slides = [[NSMutableArray array] retain];
+        # self.selectionIndexes = [NSIndexSet indexSet];
+
+        # // init the input trackers
+        # [self _initTrackers];
+
+        # // register for dragging
+        # [self registerForDraggedTypes:[NSArray arrayWithObject:(NSString *)kUTTypeFileURL]];
+
+        # // we want touch events
+        self.setAcceptsTouchEvents_(objc.YES)
+     
+    
         return result
 
     def drawRect_(self, rect):
@@ -131,7 +178,7 @@ class OpenView(NSView):
 
     def isOpaque(self):
         """."""
-        return (self.backgroundColor().alphaComponent() >= 1.0)
+        # return (self.backgroundColor().alphaComponent() >= 1.0)
 
     def offsetLocationByX_andY_(self, x, y):
         """."""
@@ -230,7 +277,7 @@ class OpenView(NSView):
 
     def backgroundColor(self):
         """."""
-        return self._backgroundColor
+        # return self._backgroundColor
 
     def setItemColor_(self, aColor):
         """."""

@@ -12,8 +12,35 @@ def printB(label,b,add=[],subtract=[],only=[], all_names=False):
     obj=b
     print_setters(obj, add=add,subtract=subtract,only=only, all_names=all_names)
     
+def xx(obj):
+    return [ k for k in obj.__dict__.keys() if ( k[-1]!='_') and ( k[-1]!=':') ]    
+    
 def print_setters(obj, add=[],subtract=[],only=[],all_names=False):
 
+
+    if all_names:
+    
+        mro = [obj] + list(obj.__class__.__mro__ )
+        mro.reverse()       # reverse in place
+    
+        print
+        for cls in mro:
+            if hasattr(cls , "__dict__" ):
+                rt = repr(cls)
+                if  'class NIL' in rt or "type 'object'" in rt or "class NSObject" in rt:
+                    pass
+                else:
+
+                    print rt
+                    print
+                    # print obj.allPropertyKeys()
+                    # print
+                    print xx(cls)
+                    print
+        
+        return
+        
+    
     s4 = "    "
 
     if all_names:
