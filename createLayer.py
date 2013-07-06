@@ -128,9 +128,9 @@ def getQCCompLayer(): # (s):
     
     theQCComposition = QCComposition.compositionWithFile_(cpath)
 
-    printB("QCComposition", theQCComposition, only=['attributes', 'defaultInputParameters', 
-                            'description', 'filePath', 'protocols',  'patch',  'inputKeys', 
-                             'identifier', 'outputKeys'])  # 'composition' is a *really* lot of info about the composition!
+    # printB("QCComposition", theQCComposition, only=['attributes', 'defaultInputParameters', 
+    #                         'description', 'filePath', 'protocols',  'patch',  'inputKeys', 
+    #                          'identifier', 'outputKeys'])  # 'composition' is a *really* lot of info about the composition!
     
 
     # print "theQCComposition.attributes() are", theQCComposition.attributes()

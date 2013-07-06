@@ -117,7 +117,7 @@ class AppDelegate (NSObject):
         
     def applicationWillBecomeActive_(self, aNotification):
         app = aNotification.object()
-        # printB("applicationWillBecomeActive",  aNotification.object())
+
         printB("applicationWillBecomeActive", app, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                     'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
@@ -133,9 +133,9 @@ class AppDelegate (NSObject):
         app = aNotification.object()
         """ Sent by the default notification center immediately before the application is deactivated."""
         # printB("applicationWillResignActive",  aNotification.object(), only=['isActive', 'mainWindow'])
-        printB("applicationWillResignActive", app, only=['acceptsFirstResponder', 'nextResponder']+
-                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
-                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
+        # printB("applicationWillResignActive", app, only=['acceptsFirstResponder', 'nextResponder']+
+        #             ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+        #                             'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
                 
         # in concert with applicationWillBecomeActive, this one might dim or still or quiesce an active display? (ie pause?)
         
@@ -175,9 +175,9 @@ class WinDelegate (NSObject):
         width, height = wf.size
         s2 = "\n    %s\n    origin=(x=%r y=%r) size=(width=%r height=%r)" % ("view.bounds:",x,y,width,height)
 
-        printB("windowDidBecomeKey",   win  ,add=['frame', 'bounds'] )
-        printB("windowDidBecomeKey",   win  , all_names=True )
-        printB("windowDidBecomeKey",   view.bounds()   )
+        # printB("windowDidBecomeKey",   win  ,add=['frame', 'bounds'] )
+        # printB("windowDidBecomeKey",   win  , all_names=True )
+        # printB("windowDidBecomeKey",   view.bounds()   )
         
     # def windowWillResize_toSize_(self, theWindow, theSize):
     #     """Informs the delegate that the window has been resized."""
@@ -199,7 +199,7 @@ class WinDelegate (NSObject):
 
     def windowDidBecomeMain_(self, aNotification ):
         """ Informs the delegate that the window has become the main window."""    
-        printB("windowDidBecomeMain",  aNotification.object())
+        # printB("windowDidBecomeMain",  aNotification.object())
     
     def windowWillEnterFullScreen_(self, aNotification):
         """The window just entered full-screen mode."""

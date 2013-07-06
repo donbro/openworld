@@ -63,8 +63,8 @@ class MyOverLayer(CALayer):         # @implementation MyOverLayer
     # also some layer subclass experimentatoin because this is the only layer subclsss I have a the moment
     
     
-    def layoutSublayersOfLayer_(self, layer):
-        printB("OpenView layoutSublayersOfLayer",  layer )
+    # def layoutSublayersOfLayer_(self, layer):
+    #     printB("OpenView layoutSublayersOfLayer",  layer )
     
 
 
@@ -104,7 +104,7 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
         # self.setBounds_( (0,0) , self.window().frame.size )
 
         printB("initWithFrame",  self ,all_names=True)
-        printB("view.initWithFrame", self, add=['frame','bounds'])
+        # printB("view.initWithFrame", self, add=['frame','bounds'])
 
         print "result of super(OpenView, self).initWithFrame_(frame) is", result
         if result is None:
@@ -125,7 +125,10 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
         # backingLayer.backgroundColor = CGColorCreateGenericRGB(1, 1, 1, 1.0);
         backingLayer.setOpaque_(objc.YES)
 
-        printB("QCLayer", backingLayer)
+        # 
+        # printB("QCLayer", backingLayer)
+        # 
+        # 
         # print_setters(backingLayer)
     
         if True:
@@ -142,7 +145,7 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
 
 
         printB("View",  self ) # frame = bounds for origin (0,0)?
-        print_setters(self, add=['bounds', 'frame'])
+        # print_setters(self, add=['bounds', 'frame'])
 
         printB("rootLayer", rootLayer, add=['bounds'])
 
@@ -179,8 +182,8 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
         # overlayLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 0.0);
         # overlayLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 
-        printB("overlayLayer", overlayLayer, all_names=True)
-        printB("overlayLayer", overlayLayer, only = ['borderColor', 'borderWidth', 'bounds'] )
+        # printB("overlayLayer", overlayLayer, all_names=True)
+        # printB("overlayLayer", overlayLayer, only = ['borderColor', 'borderWidth', 'bounds'] )
 
         backingLayer.addSublayer_(overlayLayer)
 
@@ -219,7 +222,7 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
         rootLayer.addSublayer_(testLayer3)
         
 
-        printB("testLayer3",  testLayer3  ) # frame = bounds for origin (0,0)?
+        # printB("testLayer3",  testLayer3  ) # frame = bounds for origin (0,0)?
 
         
         
@@ -282,7 +285,7 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
 
     def touchesBeganWithEvent_(self, event):
         """Informs the receiver that new set of touches has been recognized."""
-        printB("touchesBeganWithEvent_",  event  ,only=general_event_info)
+        # printB("touchesBeganWithEvent_",  event  ,only=general_event_info)
         # touchesMatchingPhase:inView:
         touches = event.touchesMatchingPhase_inView_( NSTouchPhaseTouching ,self)
         
@@ -318,14 +321,14 @@ class OpenView(NSView):   # my OpenView was LTView in LightTable
     # # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
 
 
-    def touchesEndedWithEvent_(self, event):
-        printB("touchesEndedWithEvent_",  event  ,only=general_event_info)
-    # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
+    # def touchesEndedWithEvent_(self, event):
+    #     printB("touchesEndedWithEvent_",  event  ,only=general_event_info)
+    # # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
 
 
-    def touchesCancelledWithEvent_(self, event):
-        printB("touchesCancelledWithEvent_",  event  ,only=general_event_info)
-    # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
+    # def touchesCancelledWithEvent_(self, event):
+    #     printB("touchesCancelledWithEvent_",  event  ,only=general_event_info)
+    # # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
 
 
     def rotateWithEvent_(self, event):
