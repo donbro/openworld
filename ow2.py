@@ -63,6 +63,16 @@ class AppDelegate (NSObject):
         view = dragView
         win.setContentView_(view)
 
+        printB("win.setContentView_(view)", view , add=['frame', 'bounds'])        
+        
+        #   windows have frames, views have bounds
+        wf = win.frame()
+        x, y = wf.origin
+        width, height = wf.size
+
+
+        view.setBounds_( ( ( 0 , 0 ) , ( width, height ) ) )
+
         # view =  win.contentView()
 
         # wf = view.bounds()
@@ -106,8 +116,9 @@ class AppDelegate (NSObject):
         
         
     def applicationWillBecomeActive_(self, aNotification):
-        printB("applicationWillBecomeActive",  aNotification.object())
-        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+        app = aNotification.object()
+        # printB("applicationWillBecomeActive",  aNotification.object())
+        printB("applicationWillBecomeActive", app, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                     'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         
@@ -119,34 +130,20 @@ class AppDelegate (NSObject):
         
 
     def applicationWillResignActive_(self, aNotification):
+        app = aNotification.object()
         """ Sent by the default notification center immediately before the application is deactivated."""
-        printB("applicationWillResignActive",  aNotification.object(), only=['isActive', 'mainWindow'])
-        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+        # printB("applicationWillResignActive",  aNotification.object(), only=['isActive', 'mainWindow'])
+        printB("applicationWillResignActive", app, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                     'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
-        
-        # activationPolicy                 : 0
-        # applicationIconImage             : <NSImage 0x7fe73311b400 Size={128, 128} Reps=(
-        # canEnterFullScreenMode           : 0
-        # delegate                         : <AppDelegate: 0x7fe733114c90>
-        # gestureEventMask                 : 3223060480
-        # helpMenu                         : None
-        # isActive                         : True
-        # mainMenu                         : None
-        # menu                             : None
-        # presentationOptions              : 0
-        # servicesMenu                     : None
-        # servicesProvider                 : None
-        # windowsMenu                      : None        
-        
-        
+                
         # in concert with applicationWillBecomeActive, this one might dim or still or quiesce an active display? (ie pause?)
         
 
     def applicationWillTerminate_(self, aNotification):
         app = aNotification.object()
-        printB("applicationWillTerminate",  app )
-        printB("App", app, only=['acceptsFirstResponder', 'nextResponder']+
+        # printB("applicationWillTerminate",  app )
+        printB("applicationWillTerminate", app, only=['acceptsFirstResponder', 'nextResponder']+
                     ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                     'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         
@@ -160,12 +157,11 @@ class AppDelegate (NSObject):
         
         
     def applicationShouldTerminateAfterLastWindowClosed_(self, theApplication):
-        printB("applicationShouldTerminateAfterLastWindowClosed is called.  returns YES",  theApplication)
-        printB("App", theApplication, only=['acceptsFirstResponder', 'nextResponder']+
-                    ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
-                                    'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
-        
-        # print "applicationShouldTerminateAfterLastWindowClosed  theApplication is %r" % ( theApplication )
+
+        print "applicationShouldTerminateAfterLastWindowClosed is called.  returns YES"
+        # printB("applicationShouldTerminateAfterLastWindowClosed. return YES", theApplication, only=['acceptsFirstResponder', 'nextResponder']+
+        #             ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+        #                             'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
         return objc.YES
         
 class WinDelegate (NSObject):
@@ -179,9 +175,27 @@ class WinDelegate (NSObject):
         width, height = wf.size
         s2 = "\n    %s\n    origin=(x=%r y=%r) size=(width=%r height=%r)" % ("view.bounds:",x,y,width,height)
 
-        printB("windowDidBecomeKey",   win   )
+        printB("windowDidBecomeKey",   win  ,add=['frame', 'bounds'] )
+        printB("windowDidBecomeKey",   win  , all_names=True )
         printB("windowDidBecomeKey",   view.bounds()   )
         
+    # def windowWillResize_toSize_(self, theWindow, theSize):
+    #     """Informs the delegate that the window has been resized."""
+    #     print "windowDidResize  name is %r, object is %r" % ( aNotification.name(), aNotification.object())
+        # Return Value
+        # A custom size to which the specified window will be resized.
+        # 
+        # Discussion
+        # The frameSize contains the size (in screen coordinates) sender will be resized to. To resize to a different size, simply return the desired size from this method; to avoid resizing, return the current size. sender’s minimum and maximum size constraints have already been applied when this method is invoked.
+        # 
+    
+
+    def windowDidResize_(self, aNotification):
+        """Informs the delegate that the window has been resized."""
+        win = aNotification.object()
+        printB("windowDidResize",   win  , only=['frame'] )
+        
+        # printB("windowDidResize",  aNotification.object())
 
     def windowDidBecomeMain_(self, aNotification ):
         """ Informs the delegate that the window has become the main window."""    
@@ -212,9 +226,9 @@ def main():
 
     app = NSApplication.sharedApplication()
     
-    # printB("App (orig)", app, only=['acceptsFirstResponder', 'nextResponder']+
-    #             ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
-    #                             'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
+    printB("App (orig)", app, only=['acceptsFirstResponder', 'nextResponder']+
+                ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
+                                'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
 
 
     # oh give me a place in the dock, and allow activation…    

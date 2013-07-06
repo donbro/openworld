@@ -11,12 +11,12 @@ import objc
 
 
 from Foundation import NSMakePoint, NSPointInRect, NSMakeRect, NSEqualPoints
-from AppKit import NSColor, NSCursor, NSView, CALayer, NSApp
+from AppKit import NSColor, NSCursor, NSView, CALayer, NSApp, NSTouchPhaseTouching
 
 from printB import printB, print_setters
 from createLayer import getQCCompLayer, createLayer, createTextLayer
 
-from Quartz import CGColorCreateGenericRGB, CIFilter
+from Quartz import CGColorCreateGenericRGB, CIFilter, CGColorCreateGenericGray
 
 # General Event Information
 
@@ -59,9 +59,16 @@ class MyOverLayer(CALayer):         # @implementation MyOverLayer
 
     def containsPoint_(self, p):
         return objc.NO    # just NO, always NO, not here , this layer never contains any points
+        
+    # also some layer subclass experimentatoin because this is the only layer subclsss I have a the moment
+    
+    
+    def layoutSublayersOfLayer_(self, layer):
+        printB("OpenView layoutSublayersOfLayer",  layer )
+    
 
 
-class OpenView(NSView):
+class OpenView(NSView):   # my OpenView was LTView in LightTable
     """."""
     _locationDefault = NSMakePoint(0.0, 0.0)
     _itemColorDefault = NSColor.redColor()
@@ -83,26 +90,25 @@ class OpenView(NSView):
 
     def initWithFrame_(self, frame):
 
+        print "initWithFrame",  frame
+
         self._location = self._locationDefault
         self._itemColor = self._itemColorDefault
         self._backgroundColor = self._backgroundColorDefault
 
-        printB("initWithFrame",  self ,all_names=True)
-        printB("view.initWithFrame", self, add=['frame'])
-        
         
         self.dragging = None
         
         result = super(OpenView, self).initWithFrame_(frame)
 
+        # self.setBounds_( (0,0) , self.window().frame.size )
+
+        printB("initWithFrame",  self ,all_names=True)
+        printB("view.initWithFrame", self, add=['frame','bounds'])
+
         print "result of super(OpenView, self).initWithFrame_(frame) is", result
         if result is None:
             return result
-
-
-        # self.setLocation_(self._locationDefault)
-        # self.setItemColor_(self._itemColorDefault)
-        # self.setBackgroundColor_(self._backgroundColorDefault)
 
         # // setup the CALayer for the overall full-screen view
 
@@ -112,9 +118,9 @@ class OpenView(NSView):
         
         backingLayer = getQCCompLayer()
         frame = self.frame()
-        # backingLayer.setBounds_( ((0, 0), (frame.size.width, frame.size.height)) ) # not necessary?
+        backingLayer.setBounds_( ((0, 0), (frame.size.width, frame.size.height)) )
         
-        # backingLayer.setFrame_( win_frame ) # view.frame() )      
+        # backingLayer.setFrame_(  view.frame() )      
         # backingLayer.frame = NSRectToCGRect(frame);
         # backingLayer.backgroundColor = CGColorCreateGenericRGB(1, 1, 1, 1.0);
         backingLayer.setOpaque_(objc.YES)
@@ -136,9 +142,9 @@ class OpenView(NSView):
 
 
         printB("View",  self ) # frame = bounds for origin (0,0)?
-        print_setters(self)
+        print_setters(self, add=['bounds', 'frame'])
 
-        printB("rootLayer", rootLayer)
+        printB("rootLayer", rootLayer, add=['bounds'])
 
 
         #
@@ -152,13 +158,29 @@ class OpenView(NSView):
         overlayLayer.setFrame_( backingLayer.frame() ) # view.frame() )      
         overlayLayer.setOpaque_( objc.NO )
 
+        borderWidth = 4.0
+        overlayLayer.setBorderWidth_(borderWidth)
+        # borderColor = CGColorCreateGenericGray(.4, 0.75)
+        borderColor = CGColorCreateGenericRGB(1, 0.5, 0.2, 0.8);
+        overlayLayer.setBorderColor_( borderColor )         
+        
+        zPosition = 20
+        
+        overlayLayer.setZPosition_(zPosition)
+
+        #   zPosition
+        #
+        # Increasing zPosition moves the layer towards the front
+        # Decreasing it moves it away and towards the back
+        #
+
         # We want to be the delegate so we can do the drag handle drawing        
         overlayLayer.setDelegate_(self)
         # overlayLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 0.0);
         # overlayLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 
         printB("overlayLayer", overlayLayer, all_names=True)
-
+        printB("overlayLayer", overlayLayer, only = ['borderColor', 'borderWidth', 'bounds'] )
 
         backingLayer.addSublayer_(overlayLayer)
 
@@ -258,27 +280,64 @@ class OpenView(NSView):
     
         return result
 
-    def drawRect_(self, rect):
-        """."""
-        NSColor.whiteColor().set()
-        NSBezierPath.fillRect_(rect)
-        self.itemColor().set()
-        NSBezierPath.fillRect_(self.calculatedItemBounds())
+    def touchesBeganWithEvent_(self, event):
+        """Informs the receiver that new set of touches has been recognized."""
+        printB("touchesBeganWithEvent_",  event  ,only=general_event_info)
+        # touchesMatchingPhase:inView:
+        touches = event.touchesMatchingPhase_inView_( NSTouchPhaseTouching ,self)
+        
+        print "touches is", len(touches), touches
 
-    def isOpaque(self):
-        """."""
-        # return (self.backgroundColor().alphaComponent() >= 1.0)
+        
+    # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
 
-    def offsetLocationByX_andY_(self, x, y):
-        """."""
-        self.setNeedsDisplayInRect_(self.calculatedItemBounds())
-        if self.isFlipped():
-            invertDeltaY = -1
-        else:
-            invertDeltaY = 1
-        self.location().x = self.location().x + x
-        self.location().y = self.location().y + y * invertDeltaY
-        self.setNeedsDisplayInRect_(self.calculatedItemBounds())
+
+    # NSSet *touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:self.view];
+    # 
+    # if (touches.count == 2) {
+    #     self.initialPoint = [self.view convertPointFromBase:[event locationInWindow]];
+    #     NSArray *array = [touches allObjects];
+    #     _initialTouches[0] = [[array objectAtIndex:0] retain];
+    #     _initialTouches[1] = [[array objectAtIndex:1] retain];
+    #     
+    #     _currentTouches[0] = [_initialTouches[0] retain];
+    #     _currentTouches[1] = [_initialTouches[1] retain];
+    # } else if (touches.count > 2) {
+    #     // More than 2 touches. Only track 2.
+    #     if (self.isTracking) {
+    #         [self cancelTracking];
+    #     } else {
+    #         [self releaseTouches];
+    #     }
+    # 
+    # }
+
+    # *lots* of these.  have to summarize/compute features of all of them.
+    # def touchesMovedWithEvent_(self, event):
+    #     printB("touchesMovedWithEvent_",  event  ,only=general_event_info)
+    # # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
+
+
+    def touchesEndedWithEvent_(self, event):
+        printB("touchesEndedWithEvent_",  event  ,only=general_event_info)
+    # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
+
+
+    def touchesCancelledWithEvent_(self, event):
+        printB("touchesCancelledWithEvent_",  event  ,only=general_event_info)
+    # [_inputTrackers makeObjectsPerformSelector:_cmd withObject:event];
+
+
+    def rotateWithEvent_(self, event):
+        printB("rotateWithEvent_",  event  ,only=general_event_info)
+
+    def magnifyWithEvent_(self, event):
+        printB("magnifyWithEvent_",  event  ,only=general_event_info)
+
+    def swipeWithEvent_(self, event):
+        printB("swipeWithEvent_",  event  ,only=general_event_info)
+
+
 
     def mouseDown_(self, event):
 
@@ -333,18 +392,42 @@ class OpenView(NSView):
         self.setBackgroundColor_(self._backgroundColorDefault)
 
     def keyDown_(self, event):
-        print "keydown, event is %r" % event
+        # print "keydown, event is %r" % event
         printB("keyDown",  event, only = general_event_info+key_event_info)
 
         handled = False
         characters = event.charactersIgnoringModifiers()
         
-        if characters.isEqual_('r'):
+        if characters == u"r": # .isEqual_('r'):
             handled = True
             self.setItemPropertiesToDefault_(self)
         if handled is False:
             q = super(OpenView, self).keyDown_(event)  # beeps if not handled/forwarded to super (who doesn't know what to do?)
             print "keydown: q is", q
+
+    def drawRect_(self, rect):
+        printB("drawRect",  rect )
+        
+        """."""
+        NSColor.whiteColor().set()
+        NSBezierPath.fillRect_(rect)
+        self.itemColor().set()
+        NSBezierPath.fillRect_(self.calculatedItemBounds())
+
+    def isOpaque(self):
+        """."""
+        # return (self.backgroundColor().alphaComponent() >= 1.0)
+
+    def offsetLocationByX_andY_(self, x, y):
+        """."""
+        self.setNeedsDisplayInRect_(self.calculatedItemBounds())
+        if self.isFlipped():
+            invertDeltaY = -1
+        else:
+            invertDeltaY = 1
+        self.location().x = self.location().x + x
+        self.location().y = self.location().y + y * invertDeltaY
+        self.setNeedsDisplayInRect_(self.calculatedItemBounds())
             
     def setLocation_(self, point):
         """."""
@@ -366,10 +449,12 @@ class OpenView(NSView):
 
     def backgroundColor(self):
         """."""
-        # return self._backgroundColor
+        return self._backgroundColor
 
     def setItemColor_(self, aColor):
         """."""
+        printB("setItemColor",  self)
+        
         if not self.itemColor().isEqual_(aColor):
             self._itemColor = aColor
             self.setNeedsDisplayInRect_(self.calculatedItemBounds())
