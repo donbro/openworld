@@ -3,7 +3,7 @@ all_objs = {}
 s4 = "    "
 s3 = "   "
 
-def printB(label,obj,add=[],subtract=[],only=[], all_names=False):
+def printBX(label,obj,add=[],subtract=[],only=[], all_names=False):
     """printB("App", NSApp(), add=['mainWindow'])"""
     
     if obj not in all_objs:
@@ -17,7 +17,7 @@ def printB(label,obj,add=[],subtract=[],only=[], all_names=False):
     print_setters(obj, add=add,subtract=subtract,only=only, all_names=all_names)
     
     
-def repr_cls(cls):
+def cls_repr(cls):
 
         rt = repr(cls)
 
@@ -50,7 +50,7 @@ def obj_attrs0(obj):
     if hasattr(obj , "__dict__" ):
         return sorted([ k for k in obj.__dict__.keys() if ( k[-1]!='_') and ( k[-1]!=':') ]    )
     else:
-        print "obj_attrs0: '" + repr_cls(obj.__class__) + "' object has no attribute '__dict__'"
+        print "obj_attrs0: '" + cls_repr(obj.__class__) + "' object has no attribute '__dict__'"
         return []
         
         
@@ -155,7 +155,7 @@ def print_setters(obj, add=[],subtract=[],only=[],all_names=False):
 import unittest
 
 import objc
-from Foundation import NSObject, NSURL
+from Foundation import NSObject, NSRect
 from AppKit import NSApplication
 
 def xx_cls(list_of_cls, skip_classes= (type,  objc.objc_class,  type(NSObject))):
@@ -164,6 +164,78 @@ def xx_cls(list_of_cls, skip_classes= (type,  objc.objc_class,  type(NSObject)))
 all_application_class_names = ['abortAllToolTips', 'abortModal', 'accessibilityActionNames', 'accessibilityAttributeNames', 'accessibilityChildrenAttribute', 'accessibilityEnhancedUserInterfaceAttribute', 'accessibilityFocusedUIElement', 'accessibilityFocusedUIElementAttribute', 'accessibilityFocusedWindowAttribute', 'accessibilityFrontmostAttribute', 'accessibilityHiddenAttribute', 'accessibilityHitTest', 'accessibilityIsChildrenAttributeSettable', 'accessibilityIsEnhancedUserInterfaceAttributeSettable', 'accessibilityIsFocusedUIElementAttributeSettable', 'accessibilityIsFocusedWindowAttributeSettable', 'accessibilityIsFrontmostAttributeSettable', 'accessibilityIsHiddenAttributeSettable', 'accessibilityIsIgnored', 'accessibilityIsMainWindowAttributeSettable', 'accessibilityIsMenuBarAttributeSettable', 'accessibilityIsRoleAttributeSettable', 'accessibilityIsRoleDescriptionAttributeSettable', 'accessibilityIsTitleAttributeSettable', 'accessibilityIsWindowsAttributeSettable', 'accessibilityMainWindowAttribute', 'accessibilityMenuBarAttribute', 'accessibilityRoleAttribute', 'accessibilityRoleDescriptionAttribute', 'accessibilityShouldUseUniqueId', 'accessibilityTitleAttribute', 'accessibilityWindowsAttribute', 'activationPolicy', 'applicationIconImage', 'areCursorRectsEnabled', 'canEnterFullScreenMode', 'completeStateRestoration', 'context', 'contextID', 'currentEvent', 'currentSystemPresentationOptions', 'deactivate', 'dealloc', 'delayWindowOrdering', 'delegate', 'disableAutomaticTermination', 'disableCursorRects', 'disableRelaunchOnLogin', 'dockTile', 'enableAutomaticTermination', 'enableCursorRects', 'enableRelaunchOnLogin', 'enabledRemoteNotificationTypes', 'extendStateRestoration', 'finalize', 'finishLaunching', 'frontWindow', 'gestureEventMask', 'helpMenu', 'init', 'isActive', 'isDefaultHelpBookSearchEnabled', 'isFullKeyboardAccessEnabled', 'isHidden', 'isRunning', 'isSpeaking', 'keyWindow', 'mainMenu', 'mainWindow', 'menu', 'modalWindow', 'orderedDocuments', 'orderedWindows', 'presentationOptions', 'preventWindowOrdering', 'run', 'servicesMenu', 'servicesProvider', 'shouldRestoreStateOnNextLaunch', 'stopModal', 'unhide', 'unhideWithoutActivation', 'unregisterForRemoteNotifications', 'updateWindows', 'userInterfaceLayoutDirection', 'windows', 'windowsMenu']
 
 my_application_names = [ 'activationPolicy', 'applicationIconImage', 'areCursorRectsEnabled', 'canEnterFullScreenMode', 'completeStateRestoration', 'context', 'contextID', 'currentEvent', 'currentSystemPresentationOptions', 'deactivate', 'dealloc', 'delayWindowOrdering', 'delegate', 'disableAutomaticTermination', 'disableCursorRects', 'disableRelaunchOnLogin', 'dockTile', 'enableAutomaticTermination', 'enableCursorRects', 'enableRelaunchOnLogin', 'enabledRemoteNotificationTypes', 'extendStateRestoration', 'finalize', 'finishLaunching', 'frontWindow', 'gestureEventMask', 'helpMenu', 'init', 'isActive', 'isDefaultHelpBookSearchEnabled', 'isFullKeyboardAccessEnabled', 'isHidden', 'isRunning', 'isSpeaking', 'keyWindow', 'mainMenu', 'mainWindow', 'menu', 'modalWindow', 'orderedDocuments', 'orderedWindows', 'presentationOptions', 'preventWindowOrdering', 'run', 'servicesMenu', 'servicesProvider', 'shouldRestoreStateOnNextLaunch', 'stopModal', 'unhide', 'unhideWithoutActivation', 'unregisterForRemoteNotifications', 'updateWindows', 'userInterfaceLayoutDirection', 'windows', 'windowsMenu']
+
+
+def printB(label,obj,add=[],subtract=[],only=[], all_names=False):
+
+    if len(label) > 0:
+        print "--------------\n\n"+s4+label
+        print
+    else:
+        print "--------------\n"
+
+    print s4+cls_repr(obj)
+
+    mro = list(obj.__class__.__mro__  )
+    mro.reverse()
+    mro.append(obj)
+
+
+    for cls in xx_cls(mro, skip_classes=(type,  objc.objc_class)):
+        print
+        
+        # if type(cls) in [type,  objc.objc_class,  type(NSObject) ]: # also: 'objc_class', 'objc_object'
+        #     print "skipping class", type(cls)
+        # else: 
+        print s4 + "-"*24
+        if hasattr(cls, 'description'):
+            print s4+cls.description()
+        else:
+            print s4+cls_repr(cls)
+        print s4 + "-"*24
+        # print
+
+        the_names =  obj_attrs0(cls)
+        # print the_names
+        # for k in sorted(the_names):
+        #     print k                         # need list to go through when crashes!
+        for k in sorted(the_names):
+            if   hasattr(obj, k) and (k not in ['finalize' ,  'dealloc', 'init', 'run', 
+                            'allowsWeakReference', 'clearProperties', 'retainWeakReference', 'copy', 'mutableCopy',
+                            'autorelease', 'release', 'canCycle', 'gState', 'makeKeyWindow', 'makeMainWindow',
+                            'windowRef', 'layoutSubtreeIfNeeded', 'lockFocus', 'becomeKeyWindow', 'becomeMainWindow'
+                            ]) and not k.startswith('accessibility'):
+    
+                # print k, 
+                print "    "+"%-32s : "  % (k,),
+                try:
+                    zz = getattr(obj, k)()
+
+                    if type(zz) == NSRect:
+                        print "NSRect[ (%r, %r), (%r, %r) ]" % (zz.origin.x, zz.origin.y, zz.size.width, zz.size.height)
+                    elif type(zz) in ( int, bool, long, type(None), tuple, objc.pyobjc_unicode):
+                        print zz
+                    else:
+                        zzr = repr(zz)
+                        if zzr.startswith('<objective-c class'): 
+                            zzr = cls_repr(zz)
+                            print zzr
+                        elif   'class __NSArray' in repr(type(zz)):
+                            if len(zz) == 0:
+                                print "()"
+                            else:
+                                print zzr 
+                        else:
+                            print type(zz), zzr
+                except (TypeError, ValueError) as e:
+                    print
+                    print e
+                    print
+                    
+            else:
+                if not hasattr(obj, k):
+                    print "no", k , "in", obj
+            #         print "    "+"%-32s : %r"  % (k, getattr(obj, k)())
         
 class do_parse_args_TestCase( unittest.TestCase ):
     """ Class to test relation_dict """
@@ -190,48 +262,96 @@ class do_parse_args_TestCase( unittest.TestCase ):
     
         app = NSApplication.sharedApplication()
         obj = app
+        
+        # print "type(app) is", type(NSApplication), type(NSObject)
+        
+        printB("test_020", obj)
 
-        mro = list(obj.__class__.__mro__  )
-        mro.reverse()
-        mro.append(obj)
-        # print objc.objc_class
-        # print [(type(cls), (type(cls) in [type,  objc.objc_class,  type(NSObject) ] ) )for cls in mro]
-        # print mro, type(mro[0]), type(mro[2])  ==type(NSObject)
-        
-        # print type(NSObject)
-        
-        label = ''
-    
-        if len(label) > 0:
-            print "--------------\n\n"+s4+label
-            print
-        else:
-            print "--------------\n"
-            
-        print s4+repr_cls(obj)
-        
-        for cls in xx_cls(mro, skip_classes=[]):
-            print
-            
-            if type(cls) in [type,  objc.objc_class,  type(NSObject) ]: # also: 'objc_class', 'objc_object'
-                print "skipping class", type(cls)
-            else: 
-                print s4+repr_cls(cls)
-                print
-                the_names =  obj_attrs0(cls)
-                print the_names
+        # mro = list(obj.__class__.__mro__  )
+        # mro.reverse()
+        # mro.append(obj)
+        # # print objc.objc_class
+        # # print [(type(cls), (type(cls) in [type,  objc.objc_class,  type(NSObject) ] ) )for cls in mro]
+        # # print mro, type(mro[0]), type(mro[2])  ==type(NSObject)
+        # 
+        # # print type(NSObject)
+        # 
+        # label = ''
+        #     
+        # if len(label) > 0:
+        #     print "--------------\n\n"+s4+label
+        #     print
+        # else:
+        #     print "--------------\n"
+        # 
+        # print s4+cls_repr(obj)
+        # 
+        # 
+        # label = 'WindowWillOpen'
+        # 
+        # print
+        # print "--------------\n\n"+s4+label
+        # print "\n"+s3+cls_repr( obj ) # , type(b)
+        # 
+        # for cls in xx_cls(mro, skip_classes=(type,  objc.objc_class)):
+        #     print
+        #     
+        #     # if type(cls) in [type,  objc.objc_class,  type(NSObject) ]: # also: 'objc_class', 'objc_object'
+        #     #     print "skipping class", type(cls)
+        #     # else: 
+        #     print s4 + "-"*24
+        #     if hasattr(cls, 'description'):
+        #         print s4+cls.description()
+        #     else:
+        #         print s4+cls_repr(cls)
+        #     print s4 + "-"*24
+        #     # print
+        #     ##############
+        #     the_names =  obj_attrs0(cls)
+        #     # print the_names
+        #     # for k in sorted(the_names):
+        #     #     print k                         # need list to go through when crashes!
+        #     for k in sorted(the_names):
+        #         if   hasattr(obj, k) and (k not in ['finalize' ,  'dealloc', 'init', 'run', 
+        #                         'allowsWeakReference', 'clearProperties', 'retainWeakReference', 'copy', 'mutableCopy',
+        #                         'autorelease']) and not k.startswith('accessibility'):
+        # 
+        #             # print k, 
+        #             print "    "+"%-32s : "  % (k,),
+        #             try:
+        #                 zz = getattr(obj, k)()
+        # 
+        #                 if type(zz) == NSRect:
+        #                     print "NSRect[ (%r, %r), (%r, %r) ]" % (zz.origin.x, zz.origin.y, zz.size.width, zz.size.height)
+        #                 elif type(zz) in ( int, bool, long, type(None), tuple, objc.pyobjc_unicode):
+        #                     print zz
+        #                 else:
+        #                     zzr = repr(zz)
+        #                     if zzr.startswith('<objective-c class'): 
+        #                         zzr = cls_repr(zz)
+        #                         print zzr
+        #                     elif   'class __NSArray' in repr(type(zz)):
+        #                         if len(zz) == 0:
+        #                             print "()"
+        #                         else:
+        #                             print zzr 
+        #                     else:
+        #                         print type(zz), zzr
+        #             except (TypeError, ValueError) as e:
+        #                 print
+        #                 print e
+        #                 print
+        #                 
+        #         else:
+        #             if not hasattr(obj, k):
+        #                 print "no", k , "in", obj
+        #         #         print "    "+"%-32s : %r"  % (k, getattr(obj, k)())
 
         
         # self.assertEqual( the_names , all_application_names )
         
         the_names = my_application_names
 
-        for k in sorted(the_names):
-            print k
-        for k in sorted(the_names):
-            print k, getattr(obj, k)()
-            # if   hasattr(obj, k) :
-            #         print "    "+"%-32s : %r"  % (k, getattr(obj, k)())
 
 
 

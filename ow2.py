@@ -226,7 +226,7 @@ def main():
 
     app = NSApplication.sharedApplication()
     
-    printB("App (orig)", app, only=['acceptsFirstResponder', 'nextResponder']+
+    printB("App (init)", app, only=['acceptsFirstResponder', 'nextResponder']+
                 ['activationPolicy','isActive', 'mainWindow', 'canEnterFullScreenMode','windows',
                                 'currentSystemPresentationOptions', 'delegate', 'presentationOptions'])
 
