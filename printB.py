@@ -1,20 +1,9 @@
+#!/usr/bin/env python
+# encoding: utf-8
 
 all_objs = {}
 s4 = "    "
 s3 = "   "
-
-def printBX(label,obj,add=[],subtract=[],only=[], all_names=False):
-    """printB("App", NSApp(), add=['mainWindow'])"""
-    
-    if obj not in all_objs:
-        print_all_names()
-    
-    print
-    print "--------------\n\n"+s4+label
-    print "\n"+s3+repr( b) # , type(b)
-
-    obj=b
-    print_setters(obj, add=add,subtract=subtract,only=only, all_names=all_names)
     
     
 def cls_repr(cls):
@@ -156,11 +145,8 @@ import unittest
 
 import objc
 from Foundation import NSObject, NSRect
-from AppKit import NSApplication
+from AppKit import NSApplication, NSWindow, NSTitledWindowMask, NSClosableWindowMask, NSMiniaturizableWindowMask, NSResizableWindowMask, NSBackingStoreBuffered, NSNormalWindowLevel
 
-
-
-my_application_names = [ 'activationPolicy', 'applicationIconImage', 'areCursorRectsEnabled', 'canEnterFullScreenMode', 'completeStateRestoration', 'context', 'contextID', 'currentEvent', 'currentSystemPresentationOptions', 'deactivate', 'dealloc', 'delayWindowOrdering', 'delegate', 'disableAutomaticTermination', 'disableCursorRects', 'disableRelaunchOnLogin', 'dockTile', 'enableAutomaticTermination', 'enableCursorRects', 'enableRelaunchOnLogin', 'enabledRemoteNotificationTypes', 'extendStateRestoration', 'finalize', 'finishLaunching', 'frontWindow', 'gestureEventMask', 'helpMenu', 'init', 'isActive', 'isDefaultHelpBookSearchEnabled', 'isFullKeyboardAccessEnabled', 'isHidden', 'isRunning', 'isSpeaking', 'keyWindow', 'mainMenu', 'mainWindow', 'menu', 'modalWindow', 'orderedDocuments', 'orderedWindows', 'presentationOptions', 'preventWindowOrdering', 'run', 'servicesMenu', 'servicesProvider', 'shouldRestoreStateOnNextLaunch', 'stopModal', 'unhide', 'unhideWithoutActivation', 'unregisterForRemoteNotifications', 'updateWindows', 'userInterfaceLayoutDirection', 'windows', 'windowsMenu']
 
 def xx_cls(list_of_cls, skip_classes= (type,  objc.objc_class,  type(NSObject))):
     return [cls for cls in list_of_cls if type(cls) not in skip_classes and hasattr(cls,"__dict__") ]
@@ -180,7 +166,7 @@ def printB(label,theObj,add=[],subtract=[],only=[], all_names=False):
 
     print s4+cls_repr(theObj)
 
-    if type(theObj) != NSApplication:
+    if type(theObj)  not in  (NSApplication,NSWindow):
         print "%s%r" % (s4 , type(theObj))
         return
         
@@ -189,13 +175,7 @@ def printB(label,theObj,add=[],subtract=[],only=[], all_names=False):
     mro.append(theObj)
 
 
-    for partialClass in xx_cls(mro, skip_classes=(type,  objc.objc_class)):
-        
-        print
-        
-
-# (<NSApplication: 0x7fad96a13cd0>, <objective-c class NSObject at 0x7fff7e328b68>)
-        
+    for partialClass in xx_cls(mro, skip_classes=(type,  objc.objc_class)):        
          
         # if type(partialClass) in [type,  objc.objc_class,  type(NSObject) ]: # also: 'objc_class', 'objc_object'
         #     print "skipping class", type(partialClass)
@@ -208,54 +188,100 @@ def printB(label,theObj,add=[],subtract=[],only=[], all_names=False):
         print s4 + "-"*24
         # print
 
-        the_names =  obj_attrs0(partialClass)
+        theAttrNames =  obj_attrs0(partialClass) # +['bounds', 'frame']
         
         # if (theObj, partialClass) not in D:
-        #     D [(theObj, partialClass)] = the_names
+        #     D [(theObj, partialClass)] = theAttrNames
         # else:
         #     keys = set(        D [(theObj, partialClass)] ) - 
         
-        # print the_names
-        # for k in sorted(the_names):
+        # print theAttrNames
+        # for k in sorted(theAttrNames):
         #     print k                         # need list to go through when crashes!
 
-        xx(theObj,the_names)
-
-def xx(partialClass, obj,the_names):
+        xx(partialClass, theObj, theAttrNames)
+import time 
+def xx(partialClass, theObj, theAttrNames):
     
-        for k in sorted(the_names):
+        for theAttrName in sorted(theAttrNames):
             
-            if   hasattr(obj, k) and (k not in ['finalize' ,  'dealloc', 'init', 'run', 
+            if   hasattr(theObj, theAttrName) and (theAttrName not in ['finalize' ,  'dealloc', 'init', 'run', 
                             'allowsWeakReference', 'clearProperties', 'retainWeakReference', 'copy', 'mutableCopy',
                             'autorelease', 'release', 'canCycle', 'gState', 'makeKeyWindow', 'makeMainWindow',
                             'windowRef', 'layoutSubtreeIfNeeded', 'lockFocus', 'becomeKeyWindow', 'becomeMainWindow',
-                            'composition', 'retain'
-                            ]) and not k.startswith('accessibility') \
-                                and not k.startswith('enable') \
-                                and not k.startswith('disable'):
+                            'composition', 'retain', 'GDBDumpCursorRects', 'display', 'displayIfNeeded',
+                            'flushWindow', 'flushWindowIfNeeded', 'invalidateShadow',
+                            'layoutIfNeeded', 'orderFrontRegardless', 'recalculateKeyViewLoop',
+                            'resetCursorRects', 'discardCursorRects', 'resignKeyWindow', 'resignMainWindow',
+                            'unregisterDraggedTypes', 'update', 'discardCachedImage', 'rebuildLayoutFromScratch',
+                            'rebuildLayoutFromScratch', 'showDeminiaturizedWindow', 'abortModal', 'gestureEventMask',
+                            'graphicsContext', 'graphicsPort', 'completeStateRestoration', 'close','exerciseAmbiguityInLayout',
+                            
+ # 'firstResponder'         ,        
+    # 'frame'                ,        
+    'frameAutosaveName'     ,           
+    # 'frameOrigin'            ,          
+    # 'frameTopLeftPoint'       ,         
+    'fullScreenAnimator' ,
+    'finishLaunching', 'frontWindow'
+                                
+                            ]) and not theAttrName.startswith('accessibility') \
+                                and not theAttrName.startswith('enable') \
+                                and not theAttrName.startswith('restore') \
+                                and not theAttrName.startswith('update') \
+                                and not theAttrName.startswith('flush') \
+                                and not theAttrName.startswith('disable')\
+                                and( theAttrName[0] <= 'f' ) :
+                                                                    
+                                                                            #  good on ..'e'], breaks on 'f' 
     
-                # print k, 
-                print "    "+"%-32s : "  % (k,),
-                
-                print MyGetAttr(obj,k)
+
+                theAttrValue =  MyGetAttr(theObj,theAttrName)   # at this point might be string or message or actual value 
+                delay_secs = .03
+                dKey = (partialClass, theObj, theAttrName)
+                if dKey not in D:
+                    D[dKey] = theAttrValue 
+                    print "    "+"%-32s"  % (theAttrName,),                
+                    print " ! ",
+                    print theAttrValue
+                    # time.sleep(delay_secs)
+                    
+                else:  # dKey is in D
+                    if D[dKey] != theAttrValue:
+                        print "    "+"%-32s"  % (theAttrName,),                
+                        print " : ",                
+                        print theAttrValue
+                        D[dKey] = theAttrValue 
+                        
+                        # time.sleep(delay_secs)
+                        
+                    else:
+                        if False:   # or "print unchanged keys=True"
+                            print "    "+"%-32s"  % (theAttrName,),                
+                            print " = ",                
+                            print theAttrValue
                 
                
             else:
-                if not hasattr(obj, k):
-                    print "no", k , "in", obj
+                if not hasattr(theObj, theAttrName):
+                    print "no", theAttrName , "in", theObj
             #         print "    "+"%-32s : %r"  % (k, getattr(obj, k)())
 
 def MyGetAttr(obj,k):
     
     try:
         zz = getattr(obj, k)()
+        # print obj, k, type(zz)
 
         if type(zz) == NSRect:
             return "NSRect[ (%r, %r), (%r, %r) ]" % (zz.origin.x, zz.origin.y, zz.size.width, zz.size.height)
-        elif type(zz) in ( int, bool, long, type(None), tuple, objc.pyobjc_unicode):
+        elif type(zz) in ( int, bool, long, type(None), tuple ):
             return zz
+        elif type(zz) in (   objc.pyobjc_unicode,  ):
+            return zz 
         else:
             zzr = repr(zz)
+            zztr = repr(type(zz))
             if zzr.startswith('<objective-c class'): 
                 zzr = cls_repr(zz)
                 return zzr
@@ -264,6 +290,11 @@ def MyGetAttr(obj,k):
                     return "()"
                 else:
                     return zzr 
+                    
+            elif   ( 'class NSConcreteData' in zztr):
+                return repr(zz)
+            elif True or  ( 'NSScriptClassDescription' in zztr) or ('class __NSCFDictionary' in zztr):
+                return zz
             else:
                 return type(zz), zzr
     except (TypeError, ValueError) as e:
@@ -285,10 +316,10 @@ class do_parse_args_TestCase( unittest.TestCase ):
         map ( lambda x: x == 2 , ('1', 'b', '4') )
     
         obj = NSApplication 
-        the_names =  obj_attrs0(obj)
+        theAttrNames =  obj_attrs0(obj)
         all_application_class_names = ['abortAllToolTips', 'abortModal', 'accessibilityActionNames', 'accessibilityAttributeNames', 'accessibilityChildrenAttribute', 'accessibilityEnhancedUserInterfaceAttribute', 'accessibilityFocusedUIElement', 'accessibilityFocusedUIElementAttribute', 'accessibilityFocusedWindowAttribute', 'accessibilityFrontmostAttribute', 'accessibilityHiddenAttribute', 'accessibilityHitTest', 'accessibilityIsChildrenAttributeSettable', 'accessibilityIsEnhancedUserInterfaceAttributeSettable', 'accessibilityIsFocusedUIElementAttributeSettable', 'accessibilityIsFocusedWindowAttributeSettable', 'accessibilityIsFrontmostAttributeSettable', 'accessibilityIsHiddenAttributeSettable', 'accessibilityIsIgnored', 'accessibilityIsMainWindowAttributeSettable', 'accessibilityIsMenuBarAttributeSettable', 'accessibilityIsRoleAttributeSettable', 'accessibilityIsRoleDescriptionAttributeSettable', 'accessibilityIsTitleAttributeSettable', 'accessibilityIsWindowsAttributeSettable', 'accessibilityMainWindowAttribute', 'accessibilityMenuBarAttribute', 'accessibilityRoleAttribute', 'accessibilityRoleDescriptionAttribute', 'accessibilityShouldUseUniqueId', 'accessibilityTitleAttribute', 'accessibilityWindowsAttribute', 'activationPolicy', 'applicationIconImage', 'areCursorRectsEnabled', 'canEnterFullScreenMode', 'completeStateRestoration', 'context', 'contextID', 'currentEvent', 'currentSystemPresentationOptions', 'deactivate', 'dealloc', 'delayWindowOrdering', 'delegate', 'disableAutomaticTermination', 'disableCursorRects', 'disableRelaunchOnLogin', 'dockTile', 'enableAutomaticTermination', 'enableCursorRects', 'enableRelaunchOnLogin', 'enabledRemoteNotificationTypes', 'extendStateRestoration', 'finalize', 'finishLaunching', 'frontWindow', 'gestureEventMask', 'helpMenu', 'init', 'isActive', 'isDefaultHelpBookSearchEnabled', 'isFullKeyboardAccessEnabled', 'isHidden', 'isRunning', 'isSpeaking', 'keyWindow', 'mainMenu', 'mainWindow', 'menu', 'modalWindow', 'orderedDocuments', 'orderedWindows', 'presentationOptions', 'preventWindowOrdering', 'run', 'servicesMenu', 'servicesProvider', 'shouldRestoreStateOnNextLaunch', 'stopModal', 'unhide', 'unhideWithoutActivation', 'unregisterForRemoteNotifications', 'updateWindows', 'userInterfaceLayoutDirection', 'windows', 'windowsMenu']
         
-        self.assertEqual( the_names , all_application_class_names )
+        self.assertEqual( theAttrNames , all_application_class_names )
         
     
         
@@ -303,6 +334,44 @@ class do_parse_args_TestCase( unittest.TestCase ):
         # print "type(app) is", type(NSApplication), type(NSObject)
         
         printB("test_020", obj)
+
+        printB("test_020 (second run)", obj)
+
+        printB("test_020 (third run)", obj)
+        
+        win = NSWindow.alloc()
+
+        win_frame = ((100.0, 350.0), (1000.0, 639.0))        
+    
+        # deferCreation
+    
+        # Specifies whether the window server creates a window device for the window immediately. 
+        # When YES, the window server defers creating the window device until the window is moved onscreen. All display messages sent to the window or its views are postponed until the window is created, just before it’s moved onscreen.
+
+        deferCreation = objc.YES
+        # deferCreation = objc.NO
+
+        win.initWithContentRect_styleMask_backing_defer_ (
+                            win_frame, 
+                                NSTitledWindowMask  |  NSClosableWindowMask | 
+                                NSMiniaturizableWindowMask |    NSResizableWindowMask, # |  NSTexturedBackgroundWindowMask,
+                            NSBackingStoreBuffered, 
+                            deferCreation 
+                        )   
+
+        win.setTitle_ ('OpenWorld')
+        win.setLevel_ (NSNormalWindowLevel) # 3)                   # floating window
+        win.setCollectionBehavior_(1 << 7) # NSWindowCollectionBehaviorFullScreenPrimary
+
+        # wf = win.frame()
+        # x, y = wf.origin
+        # width, height = wf.size
+        # s = "origin=(x=%r y=%r) size=(width=%r height=%r)" % (x,y,width,height)
+
+        win.setViewsNeedDisplay_(objc.NO)
+
+        printB("Win", win, add=['frame'])
+        
 
 
 
