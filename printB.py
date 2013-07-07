@@ -222,7 +222,7 @@ def xx(partialClass, theObj, theAttrNames):
     'frameAutosaveName'     ,           
     # 'frameOrigin'            ,          
     # 'frameTopLeftPoint'       ,         
-    'fullScreenAnimator' ,
+    # 'fullScreenAnimator' ,
     'finishLaunching', 'frontWindow'
                                 
                             ]) and not theAttrName.startswith('accessibility') \
@@ -230,10 +230,10 @@ def xx(partialClass, theObj, theAttrNames):
                                 and not theAttrName.startswith('restore') \
                                 and not theAttrName.startswith('update') \
                                 and not theAttrName.startswith('flush') \
-                                and not theAttrName.startswith('disable')\
-                                and( theAttrName[0] <= 'f' ) :
+                                and not theAttrName.startswith('disable'):
+                                # and( theAttrName[0] <= 't' ) :
                                                                     
-                                                                            #  good on ..'e'], breaks on 'f' 
+                                                                            #  good on ..'r'
     
 
                 theAttrValue =  MyGetAttr(theObj,theAttrName)   # at this point might be string or message or actual value 
